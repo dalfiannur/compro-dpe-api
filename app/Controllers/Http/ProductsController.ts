@@ -14,7 +14,6 @@ export default class ProductsController {
         else {
             const product = await Product.create({
                 name: payload.name,
-                price: payload.price,
                 categoryId: category.id,
                 sku: payload.sku,
                 description: payload.description,

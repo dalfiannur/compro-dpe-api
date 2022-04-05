@@ -1,17 +1,17 @@
 import { DateTime } from 'luxon'
-import { BaseModel, belongsTo, column, BelongsTo } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
-import Category from './Category'
+import User from './User'
 
-export default class Product extends BaseModel {
+export default class Article extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
   @column()
-  public name: string
+  public userId: number
 
   @column()
-  public categoryId: number
+  public title: string
 
   @column()
   @slugify({
@@ -22,19 +22,10 @@ export default class Product extends BaseModel {
   public slug: string
 
   @column()
-  public sku: string
+  public content: string
 
   @column()
-  public description: string
-
-  @column()
-  public used_as: string
-
-  @column()
-  public how_to_use: string
-
-  @column()
-  public keyingredient: string
+  public thumbnail: string
 
   @column()
   public is_featured: boolean
@@ -45,6 +36,6 @@ export default class Product extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
-  @belongsTo(() => Category)
-  public category: BelongsTo<typeof Category>
+  @belongsTo(() => User)
+  public user: BelongsTo<typeof User>
 }

@@ -49,3 +49,23 @@ Route.group(() => {
   Route.delete('/:id', 'ProductsController.delete')
 })
 .prefix('product')
+
+Route.group(() => {
+  Route.get('/', 'ArticlesController.show')
+
+  Route.post('/', 'ArticlesController.create')
+
+  Route.put('/:id', 'ArticlesController.update')
+
+  Route.delete('/:id', 'ArticlesController.delete')
+})
+.prefix('article')
+
+Route.group(() => {
+  Route.get('/', 'TagsController.show')
+
+  Route.post('/', 'TagsController.create')
+
+  Route.delete('/:id', 'TagsController.delete')
+})
+.prefix('tag')

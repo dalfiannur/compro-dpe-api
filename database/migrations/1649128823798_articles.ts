@@ -1,20 +1,16 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
-export default class Products extends BaseSchema {
-  protected tableName = 'products'
+export default class Articles extends BaseSchema {
+  protected tableName = 'articles'
 
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
-      table.integer('category_id').unsigned()
-      table.string('name')
+      table.integer('user_id').unsigned()
+      table.string('title')
       table.string('slug')
-      table.foreign('category_id').references('categories.id')
-      table.string('sku')
-      table.string('description')
-      table.string('used_as')
-      table.string('how_to_use')
-      table.string('keyingredient')
+      table.string('content')
+      table.string('thumbnail')
       table.boolean('is_featured')
 
       /**

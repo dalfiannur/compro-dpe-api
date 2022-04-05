@@ -6,7 +6,6 @@ export default class ProductValidator {
   
     public schema = schema.create({
       name: schema.string({ trim: true }),
-      price: schema.number(),
       category_slug: schema.string(),
       sku: schema.string(),
       description: schema.string(),
