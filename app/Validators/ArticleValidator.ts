@@ -27,6 +27,7 @@ export default class ArticleValidator {
     title: schema.string({ trim: true }),
     user_email: schema.string(),
     content: schema.string(),
+    tags: schema.array().members(schema.string()),
     thumbnail: schema.string(),
     is_featured: schema.boolean()
   })

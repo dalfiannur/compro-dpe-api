@@ -1,5 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Article from 'App/Models/Article'
+import ArticlesTag from 'App/Models/ArticlesTag'
+import Tag from 'App/Models/Tag'
 import User from 'App/Models/User'
 import ArticleValidator from 'App/Validators/ArticleValidator'
 import UpdateArticleValidator from 'App/Validators/UpdateArticleValidator'
@@ -19,6 +21,25 @@ export default class ArticlesController {
                 thumbnail: payload.thumbnail,
                 is_featured: payload.is_featured
             })
+            for (const i in payload.tags){
+                const tagResult = await Tag.findBy('name', i)
+                if (!tagResult){
+                    const tag = await Tag.create({name: i})
+                    const articlesTags = ArticlesTag.create({
+                        articlesId: article.id,
+                        tagsId: tag.id
+                    })
+                    return articlesTags
+                }
+                else {
+                    const articlesTags = await ArticlesTag.create({
+                        articlesId: article.id,
+                        tagsId: tagResult.id
+                    })
+                    return articlesTags
+                }
+
+            }
             return article
         }
     }
