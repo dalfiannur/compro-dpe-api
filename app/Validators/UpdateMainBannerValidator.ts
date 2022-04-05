@@ -1,7 +1,7 @@
 import { schema, rules } from "@ioc:Adonis/Core/Validator";
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 
-export default class StoreMainBannerValidator {
+export default class UpdateMainBannerValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   /*
@@ -24,9 +24,9 @@ export default class StoreMainBannerValidator {
    *    ```
    */
   public schema = schema.create({
-    image_source: schema.string({ trim: true }, [rules.required()]),
-    title: schema.string({ trim: true }, [rules.required()]),
-    sub_title: schema.string({ trim: true }, [rules.required()]),
+    image_source: schema.string.optional({ trim: true }, [rules.required()]),
+    title: schema.string.optional({ trim: true }, [rules.required()]),
+    sub_title: schema.string.optional({ trim: true }, [rules.required()]),
   });
 
   /**
