@@ -27,7 +27,7 @@ export default class ClinicsController {
   }
 
   public async delete({ request }: HttpContextContract) {
-    const id = request.params("id");
+    const id = request.param("id");
     const user = await Clinic.findOrFail(id);
     await user.delete();
   }

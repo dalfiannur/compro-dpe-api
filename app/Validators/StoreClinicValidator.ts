@@ -26,6 +26,8 @@ export default class StoreClinicValidator {
   public schema = schema.create({
     name: schema.string({ trim: true }, [rules.required()]),
     address: schema.string({ trim: true }, [rules.required()]),
+    latitude: schema.string({ trim: true }, [rules.required()]),
+    longitude: schema.string({ trim: true }, [rules.required()]),
   });
 
   /**

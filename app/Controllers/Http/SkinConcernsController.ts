@@ -27,7 +27,7 @@ export default class SkinConcernsController {
   }
 
   public async delete({ request }: HttpContextContract) {
-    const id = request.params("id");
+    const id = request.param("id");
     const user = await SkinConcern.findOrFail(id);
     await user.delete();
   }

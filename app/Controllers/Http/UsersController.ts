@@ -21,8 +21,8 @@ export default class UsersController {
     return data;
   }
 
-  public async findbyId(request: HttpContextContract) {
-    const id = request.params("id");
+  public async findbyId({ request }: HttpContextContract) {
+    const id = request.param("id");
     const user = await User.find(id);
     return user;
   }
@@ -34,7 +34,7 @@ export default class UsersController {
   }
 
   public async delete({ request }: HttpContextContract) {
-    const id = request.params("id");
+    const id = request.param("id");
     const user = await User.findOrFail(id);
     await user.delete();
   }

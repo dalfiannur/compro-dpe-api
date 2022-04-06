@@ -26,8 +26,8 @@ export default class MainBannersController {
     await user.save();
   }
 
-  public async delete(request, params: HttpContextContract) {
-    const id = request.params("id");
+  public async delete({ request }: HttpContextContract) {
+    const id = request.param("id");
     const user = await MainBanner.findOrFail(id);
     await user.delete();
   }
