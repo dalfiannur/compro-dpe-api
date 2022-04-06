@@ -1,7 +1,9 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Category from 'App/Models/Category'
 import Product from 'App/Models/Product'
+import RelatedProduct from 'App/Models/RelatedProduct'
 import ProductValidator from 'App/Validators/ProductValidator'
+import RelatedProductValidator from 'App/Validators/RelatedProductValidator'
 import UpdateProductValidator from 'App/Validators/UpdateProductValidator'
 
 export default class ProductsController {
@@ -23,6 +25,22 @@ export default class ProductsController {
                 is_featured: payload.is_featured
             })
             return product
+        }
+    }
+
+    public async relate({request}: HttpContextContract){
+        const payload = await request.validate(RelatedProductValidator)
+        const product = await Product.findBy('id', payload.productId)
+        if (product){
+            for (const i in payload.relatedProduct){
+                const related = await RelatedProduct.findBy('id', i)
+                if (related){
+                    await RelatedProduct.create({
+                        product1: product.id,
+                        product2: related.id
+                    })
+                }
+            }
         }
     }
 

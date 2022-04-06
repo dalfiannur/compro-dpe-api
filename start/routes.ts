@@ -44,6 +44,8 @@ Route.group(() => {
 
   Route.post('/', 'ProductsController.create')
 
+  Route.post('/:id/related', 'ProductsController.relate')
+
   Route.put('/:id', 'ProductsController.update')
 
   Route.delete('/:id', 'ProductsController.delete')
