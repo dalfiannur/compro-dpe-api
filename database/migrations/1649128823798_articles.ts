@@ -7,6 +7,7 @@ export default class Articles extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table.integer('user_id').unsigned()
+      table.foreign('user_id').references('users.id')
       table.string('title')
       table.string('slug')
       table.string('content')
