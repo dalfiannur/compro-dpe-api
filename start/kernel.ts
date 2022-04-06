@@ -41,5 +41,4 @@ Server.middleware.register([
 |
 */
 Server.middleware.registerNamed({
-  uploadImage: () => import('App/Middleware/UploadImage')
 })
