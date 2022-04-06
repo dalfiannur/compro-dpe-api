@@ -28,19 +28,21 @@ export default class ProductsController {
         }
     }
 
-    public async relate({request}: HttpContextContract){
+    public async relate({request, params, response}: HttpContextContract){
         const payload = await request.validate(RelatedProductValidator)
-        const product = await Product.findBy('id', payload.productId)
+        const product = await Product.findBy('id', params.id)
         if (product){
-            for (const i in payload.relatedProduct){
-                const related = await RelatedProduct.findBy('id', i)
+            for (const i of payload.relatedProduct){
+                const related = await Product.findBy('id', i)
                 if (related){
-                    await RelatedProduct.create({
-                        product1: product.id,
-                        product2: related.id
-                    })
+                    await RelatedProduct.firstOrCreate({ product_1: product.id, product_2: related.id })
                 }
             }
+            return response.json({ 
+                message: 'Success'
+            })
+        } else {
+            return response.notFound('Product not found')
         }
     }
 

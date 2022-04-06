@@ -3,14 +3,13 @@ import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import Product from './Product'
 
 export default class RelatedProduct extends BaseModel {
-  @column({ isPrimary: true })
-  public id: number
+  public static selfAssignPrimaryKey = true
 
   @column()
-  public product1: number
+  public product_1: number
 
   @column()
-  public product2: number
+  public product_2: number
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

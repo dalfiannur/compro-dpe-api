@@ -1,0 +1,13 @@
+### Paginate
+GET http://localhost:3333/main-banners HTTP/1.1
+
+### Store
+POST http://localhost:3333/main-banners HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "Main Banner",
+  "image": "http://localhost:3333/images/main-banner.jpg",
+  "link": "http://localhost:3333/main-banner",
+  "position": 1
+}

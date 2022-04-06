@@ -67,15 +67,10 @@ Route.group(() => {
 
 Route.group(() => {
   Route.get('/', 'CategoriesController.show')
-
-  Route.get('/:slug', 'CategoriesController.findBySlug')
-
-  Route.post('/', 'CategoriesController.store')
-
+  // Route.get('/:slug', 'CategoriesController.findBySlug')
+  // Route.post('/', 'CategoriesController.store')
   // Route.put('/:id', 'CategoriesController.update') 
-
-  Route.delete('/:id', 'CategoriesController.delete')
-
+  // Route.delete('/:id', 'CategoriesController.delete')
   // Route.post('/findcategory', 'CategoriesController.findCategory')
 })
 .prefix('/category')
@@ -95,20 +90,15 @@ Route.group(() => {
 
 Route.group(() => {
   Route.get('/', 'ArticlesController.show')
-
   Route.post('/', 'ArticlesController.create')
-
   Route.put('/:id', 'ArticlesController.update')
-
   Route.delete('/:id', 'ArticlesController.delete')
 })
 .prefix('article')
 
 Route.group(() => {
   Route.get('/', 'TagsController.show')
-
-  Route.post('/', 'TagsController.create')
-
+  // Route.post('/', 'TagsController.create')
   Route.delete('/:id', 'TagsController.delete')
 })
 .prefix('tag')

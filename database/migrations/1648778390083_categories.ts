@@ -8,7 +8,7 @@ export default class Categories extends BaseSchema {
       table.increments('id')
       table.string('name')
       table.string('slug')
-      // table.string('icon')
+      table.string('icon')
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */

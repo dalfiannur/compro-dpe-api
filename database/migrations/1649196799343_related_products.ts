@@ -5,9 +5,8 @@ export default class RelatedProducts extends BaseSchema {
 
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
-      // table.increments('id')
-      table.integer('product-1').unsigned()
-      table.integer('product-2').unsigned()
+      table.integer('product_1').unsigned()
+      table.integer('product_2').unsigned()
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL

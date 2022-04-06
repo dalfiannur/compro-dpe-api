@@ -24,7 +24,6 @@ export default class RelatedProductValidator {
    *    ```
    */
   public schema = schema.create({
-    productId: schema.number(),
     relatedProduct: schema.array().members(schema.number())
   })
 
