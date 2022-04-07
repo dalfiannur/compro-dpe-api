@@ -1,0 +1,27 @@
+### Paginate
+GET http://localhost:3333/users HTTP/1.1
+
+### Find By Id
+GET http://localhost:3333/users/1 HTTP/1.1
+
+### Store
+POST http://localhost:3333/users HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "Admin",
+  "email": "admin@mail.com",
+  "password": "admin"
+}
+
+### Update
+PUT http://localhost:3333/users/1 HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "Admin 1",
+  "email": "admin@mail.com"
+}
+
+### Delete
+DELETE http://localhost:3333/users/2 HTTP/1.1

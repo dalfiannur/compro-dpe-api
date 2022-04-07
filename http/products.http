@@ -1,0 +1,28 @@
+### Paginate
+GET http://localhost:3333/product HTTP/1.1
+
+### Store
+POST http://localhost:3333/product HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "Product 3",
+  "category_slug": "repair",
+  "sku": "SKU0003",
+  "images": [],
+  "skin_type_ids": [],
+  "skin_concern_ids": [],
+  "description": "This is description",
+  "used_as": "Used as something other than a cosmetic product",
+  "how_to_use": "How to use this product",
+  "keyingredient": "Key1, Key2, Key3",
+  "is_featured": false
+}
+
+### Store Relate
+POST http://localhost:3333/product/1/related HTTP/1.1
+Content-Type: application/json
+
+{
+  "relatedProduct": [2,3]
+}

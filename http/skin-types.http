@@ -1,0 +1,21 @@
+### Paginate
+GET http://localhost:3333/skin-types HTTP/1.1
+
+### Store
+POST http://localhost:3333/skin-types HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "Normal"
+}
+
+### Update
+PUT http://localhost:3333/skin-types/1 HTTP/1.
+Content-Type: application/json
+
+{
+  "name": "Sen"
+}
+
+### Delete
+DELETE http://localhost:3333/skin-types/1 HTTP/1.1

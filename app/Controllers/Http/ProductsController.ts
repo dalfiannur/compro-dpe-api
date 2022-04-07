@@ -1,7 +1,12 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Category from 'App/Models/Category'
 import Product from 'App/Models/Product'
+import ProductImage from 'App/Models/ProductImage'
+import ProductSkinConcern from 'App/Models/ProductSkinConcern'
+import ProductSkinType from 'App/Models/ProductSkinType'
 import RelatedProduct from 'App/Models/RelatedProduct'
+import SkinConcern from 'App/Models/SkinConcern'
+import SkinType from 'App/Models/SkinType'
 import ProductValidator from 'App/Validators/ProductValidator'
 import RelatedProductValidator from 'App/Validators/RelatedProductValidator'
 import UpdateProductValidator from 'App/Validators/UpdateProductValidator'
@@ -24,23 +29,51 @@ export default class ProductsController {
                 keyingredient: payload.keyingredient,
                 is_featured: payload.is_featured
             })
+            for (const i in payload.skin_type_ids){
+                const skinTypeResult = await SkinType.findBy('id', i)
+                if (skinTypeResult){
+                    await ProductSkinType.create({
+                        productId: product.id,
+                        skinTypeId: skinTypeResult.id
+                    })
+                }
+            }
+            for (const i in payload.skin_concern_ids){
+                const skinConcernResult = await SkinConcern.findBy('id', i)
+                if (skinConcernResult){
+                    await ProductSkinConcern.create({
+                        productId: product.id,
+                        skinConcernId: skinConcernResult.id
+                    })
+                }
+            }
+
+            for (const i in payload.images){
+                await ProductImage.create({
+                    productId: product.id,
+                    imageSource: i
+                })
+            }
+                
             return product
         }
     }
 
-    public async relate({request}: HttpContextContract){
+    public async relate({request, params, response}: HttpContextContract){
         const payload = await request.validate(RelatedProductValidator)
-        const product = await Product.findBy('id', payload.productId)
+        const product = await Product.findBy('id', params.id)
         if (product){
-            for (const i in payload.relatedProduct){
-                const related = await RelatedProduct.findBy('id', i)
+            for (const i of payload.relatedProduct){
+                const related = await Product.findBy('id', i)
                 if (related){
-                    await RelatedProduct.create({
-                        product1: product.id,
-                        product2: related.id
-                    })
+                    await RelatedProduct.firstOrCreate({ product_1: product.id, product_2: related.id })
                 }
             }
+            return response.json({ 
+                message: 'Success'
+            })
+        } else {
+            return response.notFound('Product not found')
         }
     }
 

@@ -1,7 +1,7 @@
 import { schema } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
-export default class RelatedProductValidator {
+export default class StoreMainBannerValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   /*
@@ -23,9 +23,7 @@ export default class RelatedProductValidator {
    *     ])
    *    ```
    */
-  public schema = schema.create({
-    relatedProduct: schema.array().members(schema.number())
-  })
+  public schema = schema.create({})
 
   /**
    * Custom messages for validation failures. You can make use of dot notation `(.)`

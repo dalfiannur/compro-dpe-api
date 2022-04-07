@@ -1,0 +1,2 @@
+### Paginate
+GET http://localhost:3333/category HTTP/1.1

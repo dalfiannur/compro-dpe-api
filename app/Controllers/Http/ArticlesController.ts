@@ -7,41 +7,44 @@ import ArticleValidator from 'App/Validators/ArticleValidator'
 import UpdateArticleValidator from 'App/Validators/UpdateArticleValidator'
 
 export default class ArticlesController {
-    public async create({request, response}: HttpContextContract){
+    public async create({request, response, auth}: HttpContextContract){
         const payload = await request.validate(ArticleValidator)
-        const user = await User.findBy('email', payload.user_email)
-        if (!user){
-            return response.notFound('User not found!')
-        }
-        else {
-            const article = await Article.create({
-                title: payload.title,
-                userId: user.id,
-                content: payload.content,
-                thumbnail: payload.thumbnail,
-                is_featured: payload.is_featured
-            })
-            for (const i in payload.tags){
-                const tagResult = await Tag.findBy('name', i)
-                if (!tagResult){
-                    const tag = await Tag.create({name: i})
-                    const articlesTags = ArticlesTag.create({
-                        articlesId: article.id,
-                        tagsId: tag.id
-                    })
-                    return articlesTags
-                }
-                else {
-                    const articlesTags = await ArticlesTag.create({
-                        articlesId: article.id,
-                        tagsId: tagResult.id
-                    })
-                    return articlesTags
-                }
-
+        const loggedIn = auth.isAuthenticated
+        if (loggedIn){
+            const user = await User.findBy('email', auth.user?.email)
+            if (!user){
+                return response.notFound('User not found!')
             }
-            return article
-        }
+            else {
+                const article = await Article.create({
+                    title: payload.title,
+                    userId: user.id,
+                    content: payload.content,
+                    thumbnail: payload.thumbnail,
+                    is_featured: payload.is_featured
+                })
+                for (const i in payload.tags){
+                    const tagResult = await Tag.findBy('name', i)
+                    if (!tagResult){
+                        const tag = await Tag.create({name: i})
+                        const articlesTags = ArticlesTag.create({
+                            articlesId: article.id,
+                            tagsId: tag.id
+                        })
+                        return articlesTags
+                    }
+                    else {
+                        const articlesTags = await ArticlesTag.create({
+                            articlesId: article.id,
+                            tagsId: tagResult.id
+                        })
+                        return articlesTags
+                    }
+
+                }
+                return article
+            }
+        }  
     }
 
     public async update({request, params, response}: HttpContextContract){

@@ -1,0 +1,28 @@
+### Paginate
+GET http://localhost:3333/clinics HTTP/1.1
+
+### Store
+POST http://localhost:3333/clinics HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "Clinic 1",
+  "address": "Jalan Raya Wanayasa",
+  "tatitude": 0.0,
+  "longitude": 1.2
+}
+
+
+### Update
+Put http://localhost:3333/clinics/1 HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "Clinic 2",
+  "address": "Jalan Raya Wanayasa",
+  "tatitude": 0.0,
+  "longitude": 1.2
+}
+
+### Delete
+DELETE http://localhost:3333/clinics/1 HTTP/1.1

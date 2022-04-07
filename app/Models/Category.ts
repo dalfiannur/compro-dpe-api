@@ -17,8 +17,8 @@ export default class Category extends BaseModel {
   })
   public slug: string
 
-  // @column()
-  // public icon: string
+  @column()
+  public icon: string
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

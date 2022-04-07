@@ -2,14 +2,15 @@ import { DateTime } from 'luxon'
 import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import Product from './Product'
 
-export default class RelatedProduct extends BaseModel {
-  public static selfAssignPrimaryKey = true
+export default class ProductImage extends BaseModel {
+  @column({ isPrimary: true })
+  public id: number
 
   @column()
-  public product_1: number
+  public productId: number
 
   @column()
-  public product_2: number
+  public imageSource: string
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
