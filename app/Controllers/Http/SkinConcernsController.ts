@@ -4,31 +4,91 @@ import StoreSkinConcernValidator from "App/Validators/StoreSkinConcernValidator"
 import UpdateSkinConcernValidator from "App/Validators/UpdateSkinConcernValidator";
 
 export default class SkinConcernsController {
-  public async store({ request }: HttpContextContract) {
+  public async store({ request, response, auth }: HttpContextContract) {
+    await auth.use("api").authenticate();
+
     const payload = await request.validate(StoreSkinConcernValidator);
-    const user = await SkinConcern.create(payload);
-    return user;
-  }
-  public async paginate({ request }: HttpContextContract) {
-    const page = request.qs().page || 1;
-    const perPage = request.qs().per_page || 10;
-    const search = request.qs().search || "";
-    const data = await SkinConcern.query()
-      .where("name", "like", search)
-      .paginate(page, perPage);
-    return data;
+
+    try {
+      const skinConcern = await SkinConcern.create(payload);
+      return response.created({
+        status: 201,
+        message: "Skin concern created successfully",
+        data: skinConcern
+      });
+    } catch (error) {
+      return response.badRequest({
+        status: 400,
+        message: "Skin concern not created",
+        error
+      });
+    }
   }
 
-  public async update({ request }: HttpContextContract) {
+  public async paginate({ request, response }: HttpContextContract) {
+    const { page = 1, perPage = 10 } = request.qs()
+
+    const data = await SkinConcern.query().paginate(page, perPage);
+
+    return response.ok({
+      status: 200,
+      message: "Skin concerns retrieved successfully",
+      ...data.toJSON()
+    })
+  }
+
+  public async update({ request, response, auth, params }: HttpContextContract) {
+    await auth.use("api").authenticate();
+
     const payload = await request.validate(UpdateSkinConcernValidator);
-    const user = await SkinConcern.findOrFail(payload);
 
-    await user.save();
+    const skinConcern = await SkinConcern.find(params.id);
+
+    if (!skinConcern) {
+      return response.notFound({
+        status: 404,
+        message: "Skin concern not found"
+      });
+    }
+
+    try {
+      await skinConcern.merge(payload).save()
+      return response.ok({
+        status: 200,
+        message: "Skin concern updated successfully",
+      })
+    } catch (error) {
+      return response.badRequest({
+        status: 400,
+        message: "Skin concern not updated",
+      })
+    }
   }
 
-  public async delete({ request }: HttpContextContract) {
-    const id = request.param("id");
-    const user = await SkinConcern.findOrFail(id);
-    await user.delete();
+  public async delete({ params, response, auth }: HttpContextContract) {
+    await auth.use("api").authenticate();
+
+    const skinConcern = await SkinConcern.find(params.id);
+
+    if (!skinConcern) {
+      return response.notFound({
+        status: 404,
+        message: "Skin concern not found"
+      });
+    }
+
+    try {
+      await skinConcern.delete()
+      return response.ok({
+        status: 200,
+        message: "Skin concern deleted successfully",
+      })
+    } catch (error) {
+      return response.badRequest({
+        status: 400,
+        message: "Skin concern not deleted",
+        error
+      })
+    }
   }
 }

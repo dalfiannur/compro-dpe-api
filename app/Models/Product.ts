@@ -1,7 +1,10 @@
 import { DateTime } from 'luxon'
-import { BaseModel, belongsTo, column, BelongsTo } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, belongsTo, column, BelongsTo, hasMany, HasMany, manyToMany, ManyToMany } from '@ioc:Adonis/Lucid/Orm'
 import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
 import Category from './Category'
+import ProductImage from './ProductImage'
+import SkinType from './SkinType'
+import SkinConcern from './SkinConcern'
 
 export default class Product extends BaseModel {
   @column({ isPrimary: true })
@@ -47,4 +50,20 @@ export default class Product extends BaseModel {
 
   @belongsTo(() => Category)
   public category: BelongsTo<typeof Category>
+
+  @hasMany(() => ProductImage)
+  public images: HasMany<typeof ProductImage>
+
+  @manyToMany(() => SkinType)
+  public skinTypes: ManyToMany<typeof SkinType>
+
+  @manyToMany(() => SkinConcern)
+  public skinConcerns: ManyToMany<typeof SkinConcern>
+
+  @manyToMany(() => Product, {
+    pivotTable: 'product_product',
+    pivotForeignKey: 'product_1',
+    pivotRelatedForeignKey: 'product_2'
+  })
+  public relates: ManyToMany<typeof Product>
 }
