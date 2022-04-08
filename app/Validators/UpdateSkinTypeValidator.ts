@@ -24,7 +24,7 @@ export default class UpdateSkinTypeValidator {
    *    ```
    */
   public schema = schema.create({
-    name: schema.string({ trim: true }, [rules.required()]),
+    name: schema.string.optional({ trim: true }, [rules.required()]),
   });
 
   /**

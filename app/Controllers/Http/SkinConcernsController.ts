@@ -12,19 +12,23 @@ export default class SkinConcernsController {
   public async paginate({ request }: HttpContextContract) {
     const page = request.qs().page || 1;
     const perPage = request.qs().per_page || 10;
-    const data = await SkinConcern.query().paginate(page, perPage);
+    const search = request.qs().search || "";
+    const data = await SkinConcern.query()
+      .where("name", "like", search)
+      .paginate(page, perPage);
     return data;
   }
 
   public async update({ request }: HttpContextContract) {
     const payload = await request.validate(UpdateSkinConcernValidator);
-    const user = await SkinConcern.findOrFail(1);
+    const user = await SkinConcern.findOrFail(payload);
 
     await user.save();
   }
 
-  public async delete(ctx: HttpContextContract) {
-    const user = await SkinConcern.findOrFail(1);
+  public async delete({ request }: HttpContextContract) {
+    const id = request.param("id");
+    const user = await SkinConcern.findOrFail(id);
     await user.delete();
   }
 }

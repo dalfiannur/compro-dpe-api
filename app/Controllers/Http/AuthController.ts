@@ -12,7 +12,7 @@ export default class AuthController {
     return user;
   }
 
-  public async login({ request, response, auth }: HttpContextContract) {
+  public async login({ request }: HttpContextContract) {
     const payload = await request.validate(LoginValidator);
 
     return  auth.attempt(payload.email, payload.password)

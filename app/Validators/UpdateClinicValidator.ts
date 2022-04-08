@@ -24,8 +24,8 @@ export default class UpdateClinicValidator {
    *    ```
    */
   public schema = schema.create({
-    name: schema.string({ trim: true }, [rules.required()]),
-    address: schema.string({ trim: true }, [rules.required()]),
+    name: schema.string.optional({ trim: true }, [rules.required()]),
+    address: schema.string.optional({ trim: true }, [rules.required()]),
   });
 
   /**

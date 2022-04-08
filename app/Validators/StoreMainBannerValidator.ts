@@ -1,5 +1,5 @@
-import { schema } from '@ioc:Adonis/Core/Validator'
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { schema, rules } from "@ioc:Adonis/Core/Validator";
+import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 
 export default class StoreMainBannerValidator {
   constructor(protected ctx: HttpContextContract) {}
@@ -23,7 +23,11 @@ export default class StoreMainBannerValidator {
    *     ])
    *    ```
    */
-  public schema = schema.create({})
+  public schema = schema.create({
+    image_source: schema.string({ trim: true }, [rules.required()]),
+    title: schema.string({ trim: true }, [rules.required()]),
+    sub_title: schema.string({ trim: true }, [rules.required()]),
+  });
 
   /**
    * Custom messages for validation failures. You can make use of dot notation `(.)`
@@ -36,5 +40,5 @@ export default class StoreMainBannerValidator {
    * }
    *
    */
-  public messages = {}
+  public messages = {};
 }
