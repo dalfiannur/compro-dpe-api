@@ -5,20 +5,43 @@ import StoreValidator from "App/Validators/StoreValidator";
 import UpdateValidator from "App/Validators/UpdateValidator";
 
 export default class UsersController {
-  public async store({ request }: HttpContextContract) {
+  public async store({ request, response, auth }: HttpContextContract) {
+    await auth.use("api").authenticate();
+
     const payload = await request.validate(StoreValidator);
-    const user = await User.create(payload);
-    return user;
+
+    try {
+      const user = await User.create(payload);
+      return response.created({
+        status: 201,
+        message: 'User created successfully',
+        data: user
+      })
+    } catch (errors) {
+      return response.badRequest({
+        status: 400,
+        message: 'User not created',
+        errors
+      })
+    }
   }
 
-  public async paginate({ request }: HttpContextContract) {
-    const page = request.qs().page || 1;
-    const perPage = request.qs().per_page || 10;
-    const search = request.qs().search || "";
-    const data = await User.query()
-      .where("name", "like", search)
-      .paginate(page, perPage);
-    return data;
+  public async paginate({ request, response }: HttpContextContract) {
+    const { page = 1, perPage = 10, search = null } = request.qs()
+
+    const data = User.query()
+
+    if (search) {
+      data.where("name", "like", `%${search}%`)
+    }
+
+    const result = await data.paginate(page, perPage);
+
+    return response.ok({
+      status: 200,
+      message: 'success',
+      data: result
+    })
   }
 
   public async findbyId({ request }: HttpContextContract) {
@@ -27,15 +50,58 @@ export default class UsersController {
     return user;
   }
 
-  public async update({ request }: HttpContextContract) {
+  public async update({ request, auth, params, response }: HttpContextContract) {
+    await auth.use('api').authenticate()
+
     const payload = await request.validate(UpdateValidator);
-    const user = await User.findOrFail(payload);
-    await user.save();
+    const user = await User.find(params.id);
+
+    if (!user) {
+      return response.notFound({
+        status: 404,
+        message: 'User not found',
+      })
+    }
+
+    try {
+      await user.merge(payload).save();
+      return response.ok({
+        status: 200,
+        message: 'User updated successfully',
+      })
+    } catch (errors) {
+      return response.badRequest({
+        status: 400,
+        message: 'User not updated',
+        errors
+      })
+    }
   }
 
-  public async delete({ request }: HttpContextContract) {
-    const id = request.param("id");
-    const user = await User.findOrFail(id);
-    await user.delete();
+  public async delete({ auth, response, params }: HttpContextContract) {
+    await auth.use('api').authenticate()
+
+    const user = await User.find(params.id);
+
+    if (!user) {
+      return response.notFound({
+        status: 404,
+        message: 'User not found',
+      })
+    }
+
+    try {
+      await user.delete();
+      return response.ok({
+        status: 200,
+        message: 'User deleted successfully',
+      })
+    } catch (errors) {
+      return response.badRequest({
+        status: 400,
+        message: 'User not deleted',
+        errors
+      })
+    }
   }
 }

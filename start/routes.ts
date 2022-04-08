@@ -25,9 +25,9 @@ Route.get("/", async () => {
 });
 
 Route.group(() => {
-  Route.post("register", "AuthController.register");
+  // Route.post("register", "AuthController.register");
   Route.post("login", "AuthController.login");
-});
+}).prefix('auth');
 
 Route.group(() => {
   Route.get("/users", "UsersController.paginate");
@@ -40,7 +40,7 @@ Route.group(() => {
 Route.group(() => {
   Route.get("/main-banners", "MainBannersController.paginate");
   Route.post("/main-banners", "MainBannersController.store");
-  Route.put("/main-banners:id", "MainBannersController.update");
+  Route.put("/main-banners/:id", "MainBannersController.update");
   Route.delete("/main-banners/:id", "MainBannersController.delete");
 });
 
