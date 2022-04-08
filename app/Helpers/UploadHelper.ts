@@ -17,17 +17,12 @@ export default class UploadHelper {
     }
 
     public static generatePath(path: string, filename: string) {
-        const uploadPath = resolve(__dirname, '../../upload');
+        const uploadPath = resolve(__dirname, '../../upload', path);
 
         if (!fs.existsSync(uploadPath)) {
             fs.mkdirSync(uploadPath, { recursive: true })
         }
 
-        const fileDir = resolve(uploadPath, path)
-        if (!fs.existsSync(fileDir)) {
-            fs.mkdirSync(fileDir, { recursive: true })
-        }
-
-        return path + '/' + filename
+        return uploadPath + '/' + filename
     }
 }

@@ -1,17 +1,16 @@
 import { DateTime } from 'luxon'
 import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
-import Article from './Article'
-import Tag from './Tag'
+import Product from './Product'
 
-export default class ArticlesTag extends BaseModel {
+export default class ProductImage extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
   @column()
-  public articleId: number
+  public productId: number
 
   @column()
-  public tagId: number
+  public imageSource: string
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
@@ -19,9 +18,6 @@ export default class ArticlesTag extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
-  @belongsTo(() => Article)
-  public article: BelongsTo<typeof Article>
-
-  @belongsTo(() => Tag)
-  public tag: BelongsTo<typeof Tag>
+  @belongsTo(() => Product)
+  public product: BelongsTo<typeof Product>
 }

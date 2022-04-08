@@ -1,75 +1,100 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import ImageHelper from 'App/Helpers/ImageHelper'
 import Article from 'App/Models/Article'
 import ArticlesTag from 'App/Models/ArticlesTag'
 import Tag from 'App/Models/Tag'
-import User from 'App/Models/User'
 import ArticleValidator from 'App/Validators/ArticleValidator'
 import UpdateArticleValidator from 'App/Validators/UpdateArticleValidator'
 
 export default class ArticlesController {
-    public async create({request, response}: HttpContextContract){
-        const payload = await request.validate(ArticleValidator)
-        const user = await User.findBy('email', payload.user_email)
-        if (!user){
-            return response.notFound('User not found!')
-        }
-        else {
-            const article = await Article.create({
-                title: payload.title,
-                userId: user.id,
-                content: payload.content,
-                thumbnail: payload.thumbnail,
-                is_featured: payload.is_featured
-            })
-            for (const i in payload.tags){
-                const tagResult = await Tag.findBy('name', i)
-                if (!tagResult){
-                    const tag = await Tag.create({name: i})
-                    const articlesTags = ArticlesTag.create({
-                        articlesId: article.id,
-                        tagsId: tag.id
-                    })
-                    return articlesTags
-                }
-                else {
-                    const articlesTags = await ArticlesTag.create({
-                        articlesId: article.id,
-                        tagsId: tagResult.id
-                    })
-                    return articlesTags
-                }
+  public async create({ request, response, auth }: HttpContextContract) {
+    await auth.use('api').authenticate()
+    const payload = await request.validate(ArticleValidator)
 
-            }
-            return article
-        }
+    const article = await Article.create({
+      title: payload.title,
+      userId: auth.user!.id,
+      content: payload.content,
+      thumbnail: payload.thumbnail,
+      is_featured: payload.is_featured
+    })
+
+    for (const i of payload.tags) {
+      const tag = await Tag.firstOrCreate({ name: i })
+      await article.related('tags').attach([tag.id]);
     }
 
-    public async update({request, params, response}: HttpContextContract){
-        const payload = await request.validate(UpdateArticleValidator)
-        const article = await Article.find(params.id)
-        if (!article){
-            return response.notFound('Article not found')
-        }
+    return response.created({
+      status: 201,
+      message: 'Article created successfully',
+      data: article
+    })
+  }
 
-        await article.merge(payload).save()
-        return article
+  public async update({ request, params, response }: HttpContextContract) {
+    const payload = await request.validate(UpdateArticleValidator)
+    const article = await Article.find(params.id)
+    if (!article) {
+      return response.notFound({
+        status: 404,
+        message: 'Article not found'
+      })
     }
 
-    public async show({request}: HttpContextContract){
-        const page = request.qs().page || 1
-        const pageLimit = request.qs().pageLimit || 5
-        const articles = await Article.query().preload('user').paginate(page, pageLimit)
-        return articles
+    if (payload.thumbnail) {
+      ImageHelper.delete(article.thumbnail)
     }
 
-    public async delete({params, response}: HttpContextContract){
-        const article = await Article.find(params.id)
-
-        if (!article){
-            return response.notFound('Article not found')
-        }
-        
-        await article.delete()
-        return `deleted ${article.title}`
+    try {
+      await article.merge(payload).save()
+      return response.ok({
+        status: 200,
+        message: 'Article updated successfully',
+        data: article
+      })
+    } catch (errors) {
+      return response.badRequest({
+        status: 400,
+        message: 'Article not updated',
+        errors
+      })
     }
+  }
+
+  public async show({ request }: HttpContextContract) {
+    const page = request.qs().page || 1
+    const pageLimit = request.qs().pageLimit || 5
+    const articles = await Article.query()
+      .preload('user')
+      .preload('tags')
+      .paginate(page, pageLimit)
+    return articles
+  }
+
+  public async delete({ params, response, auth }: HttpContextContract) {
+    await auth.use('api').authenticate()
+
+    const article = await Article.find(params.id)
+
+    if (!article) {
+      return response.notFound({
+        status: 404,
+        message: 'Article not found'
+      })
+    }
+
+    try {
+      await article.delete()
+      return response.ok({
+        status: 200,
+        message: 'Article deleted successfully'
+      })
+    } catch (errors) {
+      return response.badRequest({
+        status: 400,
+        message: 'Article not deleted',
+        errors
+      })
+    }
+  }
 }

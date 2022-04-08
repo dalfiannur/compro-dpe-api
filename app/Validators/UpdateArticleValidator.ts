@@ -24,10 +24,10 @@ export default class UpdateArticleValidator {
    *    ```
    */
   public schema = schema.create({
-    title: schema.string({ trim: true }),
-    content: schema.string(),
-    thumbnail: schema.string(),
-    is_featured: schema.boolean()
+    title: schema.string.optional({ trim: true }),
+    content: schema.string.optional(),
+    thumbnail: schema.string.optional(),
+    is_featured: schema.boolean.optional()
   })
 
   /**

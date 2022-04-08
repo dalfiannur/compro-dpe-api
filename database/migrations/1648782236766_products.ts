@@ -11,10 +11,10 @@ export default class Products extends BaseSchema {
       table.string('slug')
       table.foreign('category_id').references('categories.id')
       table.string('sku')
-      table.string('description')
+      table.text('description')
       table.string('used_as')
-      table.string('how_to_use')
-      table.string('keyingredient')
+      table.text('how_to_use')
+      table.text('keyingredient')
       table.boolean('is_featured')
 
       /**
