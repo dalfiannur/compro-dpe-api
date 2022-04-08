@@ -8,8 +8,8 @@ export default class ProductsSkinConcerns extends BaseSchema {
       // table.increments('id')
       table.integer('product_id').unsigned()
       table.foreign('product_id').references('products')
-      table.integer('skin_concerns_id').unsigned()
-      table.foreign('skin_concerns_id').references('skin_concerns')
+      table.integer('skin_concern_id').unsigned()
+      table.foreign('skin_concern_id').references('skin_concerns')
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL

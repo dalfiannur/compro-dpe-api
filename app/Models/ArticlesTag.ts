@@ -4,14 +4,14 @@ import Article from './Article'
 import Tag from './Tag'
 
 export default class ArticlesTag extends BaseModel {
-  // @column({ isPrimary: true })
-  // public id: number
+  @column({ isPrimary: true })
+  public id: number
 
   @column()
-  public articlesId: number
+  public articleId: number
 
   @column()
-  public tagsId: number
+  public tagId: number
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
