@@ -1,7 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import ImageHelper from 'App/Helpers/ImageHelper'
 import Article from 'App/Models/Article'
-import ArticlesTag from 'App/Models/ArticlesTag'
 import Tag from 'App/Models/Tag'
 import ArticleValidator from 'App/Validators/ArticleValidator'
 import UpdateArticleValidator from 'App/Validators/UpdateArticleValidator'
