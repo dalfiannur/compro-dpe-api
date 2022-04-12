@@ -27,7 +27,7 @@ export default class StoreHowToUseBannerValidator {
     categoryId: schema.number(),
     images: schema.array().members(schema.string()),
     title: schema.string.optional({ trim: true }),
-    sub_title: schema.string.optional({ trim: true }),
+    subTitle: schema.string.optional({ trim: true }),
   });
 
   /**

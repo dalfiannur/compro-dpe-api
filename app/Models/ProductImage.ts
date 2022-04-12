@@ -1,6 +1,8 @@
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import { BelongsTo, belongsTo, column, computed } from '@ioc:Adonis/Lucid/Orm'
 import Product from './Product'
+import { AssetHelper } from 'App/Helpers/AssetHelper'
+import BaseModel from './BaseModel'
 
 export default class ProductImage extends BaseModel {
   @column({ isPrimary: true })
@@ -11,6 +13,11 @@ export default class ProductImage extends BaseModel {
 
   @column()
   public imageSource: string
+
+  @computed()
+  public get imageSourceUrl() {
+    return AssetHelper.getFullUrl(this.imageSource)
+  }
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

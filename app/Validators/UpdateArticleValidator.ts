@@ -27,7 +27,7 @@ export default class UpdateArticleValidator {
     title: schema.string.optional({ trim: true }),
     content: schema.string.optional(),
     thumbnail: schema.string.optional(),
-    is_featured: schema.boolean.optional()
+    isFeatured: schema.boolean.optional()
   })
 
   /**

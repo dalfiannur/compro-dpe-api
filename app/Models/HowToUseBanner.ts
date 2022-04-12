@@ -1,6 +1,8 @@
 import { DateTime } from "luxon";
-import { BaseModel, BelongsTo, belongsTo, column } from "@ioc:Adonis/Lucid/Orm";
+import { BelongsTo, belongsTo, column, computed } from "@ioc:Adonis/Lucid/Orm";
 import Category from "./Category";
+import { AssetHelper } from "App/Helpers/AssetHelper";
+import BaseModel from "./BaseModel";
 
 export default class HowToUseBanner extends BaseModel {
   @column({ isPrimary: true })
@@ -10,13 +12,18 @@ export default class HowToUseBanner extends BaseModel {
   public categoryId: number;
 
   @column()
-  public image_source: string;
+  public imageSource: string;
+
+  @computed()
+  public get imageSourceUrl() {
+    return AssetHelper.getFullUrl(this.imageSource);
+  }
 
   @column()
   public title?: string;
 
   @column()
-  public sub_title?: string;
+  public subTitle?: string;
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime;

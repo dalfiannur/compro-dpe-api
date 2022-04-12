@@ -34,7 +34,7 @@ export default class ProductsController {
 
     const payload = await request.validate(ProductValidator)
 
-    const category = await Category.findBy('slug', payload.category_slug)
+    const category = await Category.findBy('slug', payload.categorySlug)
 
     if (!category) {
       return response.notFound('Category not found!')
@@ -45,18 +45,18 @@ export default class ProductsController {
       categoryId: category.id,
       sku: payload.sku,
       description: payload.description,
-      used_as: payload.used_as,
-      how_to_use: payload.how_to_use,
+      usedAs: payload.usedAs,
+      howToUse: payload.howToUse,
       keyingredient: payload.keyingredient,
-      is_featured: payload.is_featured
+      isFeatured: payload.isFeatured
     })
-    for (const i of payload.skin_type_ids) {
+    for (const i of payload.skinTypeIds) {
       const skinTypeResult = await SkinType.findBy('id', i)
       if (skinTypeResult) {
         await product.related('skinTypes').attach([skinTypeResult.id])
       }
     }
-    for (const i of payload.skin_concern_ids) {
+    for (const i of payload.skinConcernIds) {
       const skinConcernResult = await SkinConcern.findBy('id', i)
       if (skinConcernResult) {
         await product.related('skinConcerns').attach([skinConcernResult.id])
@@ -124,7 +124,7 @@ export default class ProductsController {
   public async update({ request, params, response, auth }: HttpContextContract) {
     await auth.use('api').authenticate()
 
-    const { category_slug, ...payload } = await request.validate(UpdateProductValidator)
+    const { categorySlug, ...payload } = await request.validate(UpdateProductValidator)
 
     const product = await Product.find(params.id)
 
@@ -135,8 +135,8 @@ export default class ProductsController {
       })
     }
 
-    if (category_slug) {
-      const category = await Category.findBy('slug', category_slug)
+    if (categorySlug) {
+      const category = await Category.findBy('slug', categorySlug)
       if (category) {
         product.categoryId = category.id
       }

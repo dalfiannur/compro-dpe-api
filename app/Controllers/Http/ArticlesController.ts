@@ -15,7 +15,7 @@ export default class ArticlesController {
       userId: auth.user!.id,
       content: payload.content,
       thumbnail: payload.thumbnail,
-      is_featured: payload.is_featured
+      isFeatured: payload.isFeatured
     })
 
     for (const i of payload.tags) {
@@ -26,7 +26,7 @@ export default class ArticlesController {
     return response.created({
       status: 201,
       message: 'Article created successfully',
-      data: article
+      data: article.serialize()
     })
   }
 
@@ -49,7 +49,7 @@ export default class ArticlesController {
       return response.ok({
         status: 200,
         message: 'Article updated successfully',
-        data: article
+        data: article.serialize()
       })
     } catch (errors) {
       return response.badRequest({
@@ -60,14 +60,19 @@ export default class ArticlesController {
     }
   }
 
-  public async show({ request }: HttpContextContract) {
-    const page = request.qs().page || 1
-    const pageLimit = request.qs().pageLimit || 5
+  public async show({ request, response }: HttpContextContract) {
+    const { page = 1, perPage = 2} = request.qs()
+
     const articles = await Article.query()
       .preload('user')
       .preload('tags')
-      .paginate(page, pageLimit)
-    return articles
+      .paginate(page, perPage)
+
+    return response.ok({
+      status: 200,
+      message: 'Articles retrieved successfully',
+      ...articles.serialize()
+    })
   }
 
   public async delete({ params, response, auth }: HttpContextContract) {

@@ -1,9 +1,11 @@
 import { DateTime } from 'luxon'
-import { afterDelete, BaseModel, BelongsTo, belongsTo, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { afterDelete, BelongsTo, belongsTo, column, computed, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
 import User from './User'
 import Tag from './Tag'
 import ImageHelper from 'App/Helpers/ImageHelper'
+import BaseModel from './BaseModel'
+import { AssetHelper } from 'App/Helpers/AssetHelper'
 
 export default class Article extends BaseModel {
   @column({ isPrimary: true })
@@ -29,8 +31,13 @@ export default class Article extends BaseModel {
   @column()
   public thumbnail: string
 
+  @computed()
+  public get thumbnailUrl() {
+    return AssetHelper.getFullUrl(this.thumbnail)
+  }
+
   @column()
-  public is_featured: boolean
+  public isFeatured: boolean
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

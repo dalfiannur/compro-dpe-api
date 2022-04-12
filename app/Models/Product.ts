@@ -1,10 +1,11 @@
 import { DateTime } from 'luxon'
-import { BaseModel, belongsTo, column, BelongsTo, hasMany, HasMany, manyToMany, ManyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { belongsTo, column, BelongsTo, hasMany, HasMany, manyToMany, ManyToMany } from '@ioc:Adonis/Lucid/Orm'
 import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
 import Category from './Category'
 import ProductImage from './ProductImage'
 import SkinType from './SkinType'
 import SkinConcern from './SkinConcern'
+import BaseModel from './BaseModel'
 
 export default class Product extends BaseModel {
   @column({ isPrimary: true })
@@ -31,16 +32,16 @@ export default class Product extends BaseModel {
   public description: string
 
   @column()
-  public used_as: string
+  public usedAs: string
 
   @column()
-  public how_to_use: string
+  public howToUse: string
 
   @column()
   public keyingredient: string
 
   @column()
-  public is_featured: boolean
+  public isFeatured: boolean
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

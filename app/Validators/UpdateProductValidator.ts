@@ -8,11 +8,11 @@ export default class UpdateProductValidator {
       name: schema.string.optional({ trim: true }),
       sku: schema.string.optional({ trim: true }),
       description: schema.string.optional({ trim: true }),
-      used_as: schema.string.optional({ trim: true }),
-      how_to_use: schema.string.optional({ trim: true }),
+      usedAs: schema.string.optional({ trim: true }),
+      howToUse: schema.string.optional({ trim: true }),
       keyingredient: schema.string.optional({ trim: true }),
-      is_featured: schema.boolean.optional(),
-      category_slug: schema.string.optional({ trim: true }),
+      isFeatured: schema.boolean.optional(),
+      categorySlug: schema.string.optional({ trim: true }),
     })
 
     public messages = {}

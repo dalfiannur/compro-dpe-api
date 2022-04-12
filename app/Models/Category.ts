@@ -1,7 +1,9 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
+import { column, computed, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
 import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
 import HowToUseBanner from './HowToUseBanner'
+import { AssetHelper } from 'App/Helpers/AssetHelper'
+import BaseModel from './BaseModel'
 
 export default class Category extends BaseModel {
   @column({ isPrimary: true })
@@ -20,6 +22,11 @@ export default class Category extends BaseModel {
 
   @column()
   public icon: string
+
+  @computed()
+  public get iconUrl() {
+    return AssetHelper.getFullUrl(this.icon)
+  }
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

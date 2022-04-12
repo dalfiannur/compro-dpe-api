@@ -1,15 +1,20 @@
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import { BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import Product from './Product'
+import BaseModel from './BaseModel'
 
 export default class RelatedProduct extends BaseModel {
   public static selfAssignPrimaryKey = true
 
-  @column()
-  public product_1: number
+  @column({
+    columnName: 'product_1',
+  })
+  public product1: number
 
-  @column()
-  public product_2: number
+  @column({
+    columnName: 'product_2',
+  })
+  public product2: number
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

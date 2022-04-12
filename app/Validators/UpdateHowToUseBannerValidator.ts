@@ -24,10 +24,10 @@ export default class UpdateHowToUseBannerValidator {
    *    ```
    */
   public schema = schema.create({
-    image_source: schema.string.optional({ trim: true }, [rules.required()]),
-    category_id: schema.number.optional(),
+    imageSource: schema.string.optional({ trim: true }, [rules.required()]),
+    categoryId: schema.number.optional(),
     title: schema.string.optional({ trim: true }, [rules.required()]),
-    sub_title: schema.string.optional({ trim: true }, [rules.required()]),
+    subTitle: schema.string.optional({ trim: true }, [rules.required()]),
   });
 
   /**

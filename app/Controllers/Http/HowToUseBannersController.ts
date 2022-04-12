@@ -24,7 +24,7 @@ export default class HowToUseBannersController {
       const banners: HowToUseBanner[] = []
       for (const image of payload.images) {
         const banner = await HowToUseBanner.create({
-          image_source: image,
+          imageSource: image,
           categoryId: category.id
         });
         banners.push(banner)
@@ -70,9 +70,9 @@ export default class HowToUseBannersController {
       })
     }
 
-    if (payload.image_source) {
-      ImageHelper.delete(banner.image_source)
-      banner.image_source = payload.image_source;
+    if (payload.imageSource) {
+      ImageHelper.delete(banner.imageSource)
+      banner.imageSource = payload.imageSource;
     }
 
     try {
