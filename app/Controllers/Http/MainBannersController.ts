@@ -52,9 +52,9 @@ export default class MainBannersController {
       })
     }
 
-    if (payload.image_source) {
-      ImageHelper.delete(banner.image_source)
-      banner.image_source = payload.image_source;
+    if (payload.imageSource) {
+      ImageHelper.delete(banner.imageSource)
+      banner.imageSource = payload.imageSource;
     }
 
     try {

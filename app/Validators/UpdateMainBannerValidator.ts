@@ -24,9 +24,9 @@ export default class UpdateMainBannerValidator {
    *    ```
    */
   public schema = schema.create({
-    image_source: schema.string.optional({ trim: true }, [rules.required()]),
+    imageSource: schema.string.optional({ trim: true }, [rules.required()]),
     title: schema.string.optional({ trim: true }, [rules.required()]),
-    sub_title: schema.string.optional({ trim: true }, [rules.required()]),
+    subTitle: schema.string.optional({ trim: true }, [rules.required()]),
   });
 
   /**
