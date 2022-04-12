@@ -1,18 +1,24 @@
 import { DateTime } from "luxon";
-import { BaseModel, column } from "@ioc:Adonis/Lucid/Orm";
+import { BaseModel, column, computed } from "@ioc:Adonis/Lucid/Orm";
+import { AssetHelper } from "App/Helpers/AssetHelper";
 
 export default class MainBanner extends BaseModel {
   @column({ isPrimary: true })
   public id: number;
 
   @column()
-  public image_source: string;
+  public imageSource: string;
+
+  @computed()
+  public get imageSourceUrl() {
+    return AssetHelper.getFullUrl(this.imageSource);
+  }
 
   @column()
   public title: string;
 
   @column()
-  public sub_title: string;
+  public subTitle: string;
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime;
