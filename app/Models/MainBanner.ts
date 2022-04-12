@@ -1,6 +1,7 @@
 import { DateTime } from "luxon";
-import { BaseModel, column, computed } from "@ioc:Adonis/Lucid/Orm";
+import { column, computed } from "@ioc:Adonis/Lucid/Orm";
 import { AssetHelper } from "App/Helpers/AssetHelper";
+import BaseModel from "./BaseModel";
 
 export default class MainBanner extends BaseModel {
   @column({ isPrimary: true })

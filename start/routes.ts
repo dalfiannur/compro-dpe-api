@@ -37,8 +37,8 @@ Route.group(() => {
 
 Route.group(() => {
   Route.get("/main-banners", "MainBannersController.paginate");
-  Route.post("/main-banners", "MainBannersController.store").middleware('UploadImage:image_source');
-  Route.put("/main-banners/:id", "MainBannersController.update").middleware('UploadImage:image_source');
+  Route.post("/main-banners", "MainBannersController.store").middleware('UploadImage:imageSource');
+  Route.put("/main-banners/:id", "MainBannersController.update").middleware('UploadImage:imageSource');
   Route.delete("/main-banners/:id", "MainBannersController.delete");
 });
 

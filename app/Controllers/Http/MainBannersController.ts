@@ -15,7 +15,7 @@ export default class MainBannersController {
       return response.created({
         status: 201,
         message: "Banner created successfully",
-        data: banner
+        data: banner.serialize()
       })
     } catch (error) {
       return response.status(400).send({
@@ -34,7 +34,7 @@ export default class MainBannersController {
     return response.ok({
       status: 200,
       message: "Banners retrieved successfully",
-      ...data.toJSON()
+      ...data.serialize()
     })
   }
 
