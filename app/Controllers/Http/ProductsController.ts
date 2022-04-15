@@ -33,7 +33,6 @@ export default class ProductsController {
     await auth.use('api').authenticate()
 
     const payload = await request.validate(ProductValidator)
-
     const category = await Category.findBy('slug', payload.categorySlug)
 
     if (!category) {
@@ -158,20 +157,27 @@ export default class ProductsController {
   }
 
   public async paginate({ request, response }: HttpContextContract) {
-    const { page = 1, perPage = 4 } = request.qs()
+    const { page = 1, perPage = 4, category } = request.qs()
 
-    const data = await Product
+    const data = Product
       .query()
       .preload('category')
       .preload('images')
       .preload('skinConcerns')
       .preload('skinTypes')
-      .paginate(page, perPage)
+
+    if (category) {
+      data.whereHas('category', (builder) => {
+        builder.where('slug', category)
+      })
+    }
+
+    const result = await data.paginate(page, perPage)
 
     return response.ok({
       status: 200,
       message: 'Products retrieved successfully',
-      ...data.toJSON()
+      ...result.toJSON()
     })
   }
 
