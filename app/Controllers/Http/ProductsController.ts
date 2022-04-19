@@ -12,8 +12,12 @@ export default class ProductsController {
   public async findBySlug({ response, params }) {
     const product = await Product.query()
       .where('slug', params.slug)
+      .preload('category')
+      .preload('skinConcerns')
+      .preload('skinTypes')
+      .preload('images')
       .preload('relates')
-      .first()
+      .first();
 
     if (!product) {
       return response.notFound({
