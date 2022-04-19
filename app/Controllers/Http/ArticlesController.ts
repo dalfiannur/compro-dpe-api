@@ -75,6 +75,21 @@ export default class ArticlesController {
     })
   }
 
+  public async findById({ params, response }: HttpContextContract) {
+    const article = await Article.findBy('slug', params.slug);
+    if (!article) {
+      return response.notFound({
+        status: 404,
+        message: 'Article not found'
+      })
+    }
+
+    return response.ok({
+      status: 200,
+      message: 'Article found',
+      data: article
+    })
+  }
   public async delete({ params, response, auth }: HttpContextContract) {
     await auth.use('api').authenticate()
 

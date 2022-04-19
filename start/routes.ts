@@ -108,6 +108,7 @@ Route.group(() => {
 
 Route.group(() => {
   Route.get('/', 'ArticlesController.show');
+  Route.get('/:slug', 'ArticlesController.findById');
   Route.post('/', 'ArticlesController.create').middleware('UploadImage:thumbnail');
   Route.put('/:id', 'ArticlesController.update').middleware('UploadImage:thumbnail');
   Route.delete('/:id', 'ArticlesController.delete')
