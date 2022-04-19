@@ -161,14 +161,19 @@ export default class ProductsController {
   }
 
   public async paginate({ request, response }: HttpContextContract) {
-    const { page = 1, perPage = 4, category } = request.qs()
+    const {
+      page = 1,
+      perPage = 4,
+      category,
+      search
+    } = request.qs();
 
     const data = Product
       .query()
       .preload('category')
       .preload('images')
       .preload('skinConcerns')
-      .preload('skinTypes')
+      .preload('skinTypes');
 
     if (category) {
       data.whereHas('category', (builder) => {
@@ -176,7 +181,11 @@ export default class ProductsController {
       })
     }
 
-    const result = await data.paginate(page, perPage)
+    if (search) {
+      data.where('name', 'like', `%${search}%`);
+    }
+
+    const result = await data.paginate(page, perPage);
 
     return response.ok({
       status: 200,

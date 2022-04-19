@@ -61,12 +61,22 @@ export default class ArticlesController {
   }
 
   public async show({ request, response }: HttpContextContract) {
-    const { page = 1, perPage = 2} = request.qs()
+    const {
+      page = 1,
+      perPage = 6,
+      search
+    } = request.qs();
 
-    const articles = await Article.query()
+    const query = Article
+      .query()
       .preload('user')
-      .preload('tags')
-      .paginate(page, perPage)
+      .preload('tags');
+
+    if (search) {
+      query.where('title', 'like', `%${search}%`)
+    }
+
+    const articles = await query.paginate(page, perPage);
 
     return response.ok({
       status: 200,
