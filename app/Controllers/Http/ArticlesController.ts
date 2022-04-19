@@ -80,7 +80,8 @@ export default class ArticlesController {
       .query()
       .preload('user')
       .preload('tags')
-      .where('slug', params.slug);
+      .where('slug', params.slug)
+      .first();
 
     if (!article) {
       return response.notFound({
