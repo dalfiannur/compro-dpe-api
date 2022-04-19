@@ -46,7 +46,7 @@ Route.group(() => {
   Route.get("/", "HowToUseBannersController.paginate");
   Route.post("/", "HowToUseBannersController.store").middleware('MultiUploadImage:images');
   Route.delete("/:id", "HowToUseBannersController.delete");
-}).prefix('how-to-use-banners')
+}).prefix('how-to-use-banners');
 
 Route.group(() => {
   Route.get("/skin-types", "SkinTypesController.paginate");
@@ -70,53 +70,53 @@ Route.group(() => {
 });
 
 Route.group(() => {
-  Route.get('/', 'CategoriesController.show')
+  Route.get('/', 'CategoriesController.show');
   Route.get('/:id/banners', 'HowToUseBannersController.getByCategoryId')
 })
-.prefix('/categories')
+.prefix('/categories');
 
 Route.group(() => {
-  Route.get('/', 'ProductsController.paginate')
-  Route.get('/:slug', 'ProductsController.findBySlug')
-  Route.post('/', 'ProductsController.create').middleware('MultiUploadImage:images')
-  Route.put('/:id', 'ProductsController.update')
-  Route.delete('/:id', 'ProductsController.delete')
+  Route.get('/', 'ProductsController.paginate');
+  Route.get('/:slug', 'ProductsController.findBySlug');
+  Route.post('/', 'ProductsController.create').middleware('MultiUploadImage:images');
+  Route.put('/:id', 'ProductsController.update');
+  Route.delete('/:id', 'ProductsController.delete');
 
   Route.group(() => {
-    Route.post('/', 'ProductsController.storeRelates')
+    Route.post('/', 'ProductsController.storeRelates');
     Route.delete('/:id', 'ProductsController.deleteRelates')
-  }).prefix('/:productId/related')
+  }).prefix('/:productId/related');
 
   Route.group(() => {
     Route.group(() => {
-      Route.post('/', 'ProductsController.storeImages').middleware('MultiUploadImage:images')
+      Route.post('/', 'ProductsController.storeImages').middleware('MultiUploadImage:images');
       Route.delete('/:id', 'ProductsController.deleteImage')
-    }).prefix('/images')
+    }).prefix('/images');
 
     Route.group(() => {
-      Route.post('/', 'ProductsController.storeSkinTypes')
+      Route.post('/', 'ProductsController.storeSkinTypes');
       Route.delete('/:id', 'ProductsController.deleteSkinType')
-    }).prefix('skin-types')
+    }).prefix('skin-types');
 
     Route.group(() => {
-      Route.post('/', 'ProductsController.storeSkinConcerns')
+      Route.post('/', 'ProductsController.storeSkinConcerns');
       Route.delete('/:id', 'ProductsController.deleteSkinConcern')
     }).prefix('skin-concerns')
   }).prefix('/:productId')
 })
-.prefix('product')
+.prefix('product');
 
 Route.group(() => {
-  Route.get('/', 'ArticlesController.show')
-  Route.post('/', 'ArticlesController.create').middleware('UploadImage:thumbnail')
-  Route.put('/:id', 'ArticlesController.update').middleware('UploadImage:thumbnail')
+  Route.get('/', 'ArticlesController.show');
+  Route.post('/', 'ArticlesController.create').middleware('UploadImage:thumbnail');
+  Route.put('/:id', 'ArticlesController.update').middleware('UploadImage:thumbnail');
   Route.delete('/:id', 'ArticlesController.delete')
 })
-.prefix('article')
+.prefix('articles');
 
 Route.group(() => {
-  Route.get('/', 'TagsController.show')
+  Route.get('/', 'TagsController.show');
   // Route.post('/', 'TagsController.create')
   Route.delete('/:id', 'TagsController.delete')
 })
-.prefix('tag')
+.prefix('tag');
