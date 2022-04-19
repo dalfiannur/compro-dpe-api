@@ -9,13 +9,13 @@ import { AssetHelper } from 'App/Helpers/AssetHelper'
 
 export default class Article extends BaseModel {
   @column({ isPrimary: true })
-  public id: number
+  public id: number;
 
   @column()
-  public userId: number
+  public userId: number;
 
   @column()
-  public title: string
+  public title: string;
 
   @column()
   @slugify({
@@ -23,13 +23,13 @@ export default class Article extends BaseModel {
     fields: ['title'],
     allowUpdates: true
   })
-  public slug: string
+  public slug: string;
 
   @column()
-  public content: string
+  public content: string;
 
   @column()
-  public thumbnail: string
+  public thumbnail: string;
 
   @computed()
   public get thumbnailUrl() {
@@ -37,19 +37,19 @@ export default class Article extends BaseModel {
   }
 
   @column()
-  public isFeatured: boolean
+  public isFeatured: boolean;
 
   @column.dateTime({ autoCreate: true })
-  public createdAt: DateTime
+  public createdAt: DateTime;
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updatedAt: DateTime
+  public updatedAt: DateTime;
 
   @belongsTo(() => User)
-  public user: BelongsTo<typeof User>
+  public user: BelongsTo<typeof User>;
 
   @manyToMany(() => Tag)
-  public tags: ManyToMany<typeof Tag>
+  public tags: ManyToMany<typeof Tag>;
 
   @afterDelete()
   public static afterDeleteHook(article: Article) {

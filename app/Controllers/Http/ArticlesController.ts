@@ -76,7 +76,12 @@ export default class ArticlesController {
   }
 
   public async findById({ params, response }: HttpContextContract) {
-    const article = await Article.findBy('slug', params.slug);
+    const article = await Article
+      .query()
+      .preload('user')
+      .preload('tags')
+      .where('slug', params.slug);
+
     if (!article) {
       return response.notFound({
         status: 404,
