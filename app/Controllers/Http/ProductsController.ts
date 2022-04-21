@@ -34,10 +34,10 @@ export default class ProductsController {
   }
 
   public async create({ request, response, auth }: HttpContextContract) {
-    await auth.use('api').authenticate()
+    await auth.use('api').authenticate();
 
-    const payload = await request.validate(ProductValidator)
-    const category = await Category.findBy('slug', payload.categorySlug)
+    const payload = await request.validate(ProductValidator);
+    const category = await Category.findBy('slug', payload.categorySlug);
 
     if (!category) {
       return response.notFound('Category not found!')
@@ -52,15 +52,15 @@ export default class ProductsController {
       howToUse: payload.howToUse,
       keyingredient: payload.keyingredient,
       isFeatured: payload.isFeatured
-    })
+    });
     for (const i of payload.skinTypeIds) {
-      const skinTypeResult = await SkinType.findBy('id', i)
+      const skinTypeResult = await SkinType.findBy('id', i);
       if (skinTypeResult) {
         await product.related('skinTypes').attach([skinTypeResult.id])
       }
     }
     for (const i of payload.skinConcernIds) {
-      const skinConcernResult = await SkinConcern.findBy('id', i)
+      const skinConcernResult = await SkinConcern.findBy('id', i);
       if (skinConcernResult) {
         await product.related('skinConcerns').attach([skinConcernResult.id])
       }
@@ -77,11 +77,11 @@ export default class ProductsController {
   }
 
   public async storeRelates({ request, params, response, auth }: HttpContextContract) {
-    await auth.use('api').authenticate()
+    await auth.use('api').authenticate();
 
-    const payload = await request.validate(RelatedProductValidator)
+    const payload = await request.validate(RelatedProductValidator);
 
-    const product = await Product.find(params.productId)
+    const product = await Product.find(params.productId);
 
     if (!product) {
       return response.notFound({
@@ -91,9 +91,9 @@ export default class ProductsController {
     }
 
     for (const id of payload.relatedProduct) {
-      const related = await Product.find(id)
+      const related = await Product.find(id);
       if (related) {
-        await product.related('relates').attach([related.id])
+        await product.related('relates').attach([related.id]);
         await related.related('relates').attach([product.id])
       }
     }
@@ -105,10 +105,10 @@ export default class ProductsController {
   }
 
   public async deleteRelates({ params, response, auth }: HttpContextContract) {
-    await auth.use('api').authenticate()
+    await auth.use('api').authenticate();
 
-    const product = await Product.find(params.productId)
-    const related = await Product.find(params.id)
+    const product = await Product.find(params.productId);
+    const related = await Product.find(params.id);
 
     if (product) {
       await product.related('relates').detach([params.id])
@@ -125,11 +125,11 @@ export default class ProductsController {
   }
 
   public async update({ request, params, response, auth }: HttpContextContract) {
-    await auth.use('api').authenticate()
+    await auth.use('api').authenticate();
 
-    const { categorySlug, ...payload } = await request.validate(UpdateProductValidator)
+    const { categorySlug, ...payload } = await request.validate(UpdateProductValidator);
 
-    const product = await Product.find(params.id)
+    const product = await Product.find(params.id);
 
     if (!product) {
       return response.notFound({
@@ -139,14 +139,14 @@ export default class ProductsController {
     }
 
     if (categorySlug) {
-      const category = await Category.findBy('slug', categorySlug)
+      const category = await Category.findBy('slug', categorySlug);
       if (category) {
         product.categoryId = category.id
       }
     }
 
     try {
-      await product.merge(payload).save()
+      await product.merge(payload).save();
       return response.ok({
         status: 200,
         message: 'Product updated successfully'
@@ -195,9 +195,9 @@ export default class ProductsController {
   }
 
   public async delete({ params, response, auth }: HttpContextContract) {
-    await auth.use('api').authenticate()
+    await auth.use('api').authenticate();
 
-    const product = await Product.find(params.id)
+    const product = await Product.find(params.id);
 
     if (!product) {
       return response.notFound({
@@ -207,7 +207,7 @@ export default class ProductsController {
     }
 
     try {
-      await product.delete()
+      await product.delete();
       return response.ok({
         status: 200,
         message: 'Product deleted successfully'
@@ -222,9 +222,9 @@ export default class ProductsController {
   }
 
   public async storeImages({ request, response, params, auth }: HttpContextContract) {
-    await auth.use('api').authenticate()
+    await auth.use('api').authenticate();
 
-    const product = await Product.find(params.productId)
+    const product = await Product.find(params.productId);
 
     if (!product) {
       return response.notFound({
@@ -247,7 +247,7 @@ export default class ProductsController {
   }
 
   public async deleteImage({ params, response, auth }: HttpContextContract) {
-    await auth.use('api').authenticate()
+    await auth.use('api').authenticate();
 
     if (!await Product.find(params.productId)) {
       return response.notFound({
@@ -256,7 +256,7 @@ export default class ProductsController {
       })
     }
 
-    const productImage = await ProductImage.find(params.id)
+    const productImage = await ProductImage.find(params.id);
 
     if (!productImage) {
       return response.notFound({
@@ -266,7 +266,7 @@ export default class ProductsController {
     }
 
     try {
-      await productImage.delete()
+      await productImage.delete();
       return response.ok({
         status: 200,
         message: 'Product image deleted successfully'
@@ -281,9 +281,9 @@ export default class ProductsController {
   }
 
   public async storeSkinTypes({ params, response, auth, request }: HttpContextContract) {
-    await auth.use('api').authenticate()
+    await auth.use('api').authenticate();
 
-    const product = await Product.find(params.productId)
+    const product = await Product.find(params.productId);
 
     if (!product) {
       return response.notFound({
@@ -293,7 +293,7 @@ export default class ProductsController {
     }
 
     for (const id of request.input('skin_type_ids')) {
-      const skinType = await SkinType.find(id)
+      const skinType = await SkinType.find(id);
 
       if (!skinType) {
         return response.notFound({
@@ -312,9 +312,9 @@ export default class ProductsController {
   }
 
   public async deleteSkinType({ params, response, auth }: HttpContextContract) {
-    await auth.use('api').authenticate()
+    await auth.use('api').authenticate();
 
-    const product = await Product.find(params.productId)
+    const product = await Product.find(params.productId);
 
     if (!product) {
       return response.notFound({
@@ -323,7 +323,7 @@ export default class ProductsController {
       })
     }
 
-    const skinType = await SkinType.find(params.id)
+    const skinType = await SkinType.find(params.id);
 
     if (!skinType) {
       return response.notFound({
@@ -333,7 +333,7 @@ export default class ProductsController {
     }
 
     try {
-      await product.related('skinTypes').detach([skinType.id])
+      await product.related('skinTypes').detach([skinType.id]);
       return response.ok({
         status: 200,
         message: 'Skin type deleted successfully'
@@ -348,9 +348,9 @@ export default class ProductsController {
   }
 
   public async storeSkinConcerns({ response, params, auth, request }: HttpContextContract) {
-    await auth.use('api').authenticate()
+    await auth.use('api').authenticate();
 
-    const product = await Product.find(params.productId)
+    const product = await Product.find(params.productId);
 
     if (!product) {
       return response.notFound({
@@ -360,7 +360,7 @@ export default class ProductsController {
     }
 
     for (const id of request.input('skin_concern_ids')) {
-      const skinConcern = await SkinConcern.find(id)
+      const skinConcern = await SkinConcern.find(id);
       if (!skinConcern) {
         return response.notFound({
           status: 404,
@@ -377,9 +377,9 @@ export default class ProductsController {
   }
 
   public async deleteSkinConcern({ response, params, auth }: HttpContextContract) {
-    await auth.use('api').authenticate()
+    await auth.use('api').authenticate();
 
-    const product = await Product.find(params.id)
+    const product = await Product.find(params.id);
 
     if (!product) {
       return response.notFound({
@@ -388,7 +388,7 @@ export default class ProductsController {
       })
     }
 
-    const skinConcern = await SkinConcern.find(params.id)
+    const skinConcern = await SkinConcern.find(params.id);
 
     if (!skinConcern) {
       return response.notFound({
@@ -398,7 +398,7 @@ export default class ProductsController {
     }
 
     try {
-      await product.related('skinConcerns').detach([skinConcern.id])
+      await product.related('skinConcerns').detach([skinConcern.id]);
       return response.ok({
         status: 200,
         message: 'Skin concern deleted successfully'

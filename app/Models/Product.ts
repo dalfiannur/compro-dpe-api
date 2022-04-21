@@ -9,13 +9,13 @@ import BaseModel from './BaseModel'
 
 export default class Product extends BaseModel {
   @column({ isPrimary: true })
-  public id: number
+  public id: number;
 
   @column()
-  public name: string
+  public name: string;
 
   @column()
-  public categoryId: number
+  public categoryId: number;
 
   @column()
   @slugify({
@@ -23,43 +23,43 @@ export default class Product extends BaseModel {
     fields: ['name'],
     allowUpdates: true
   })
-  public slug: string
+  public slug: string;
 
   @column()
-  public sku: string
+  public sku: string;
 
   @column()
-  public description: string
+  public description: string;
 
   @column()
-  public usedAs: string
+  public usedAs: string;
 
   @column()
-  public howToUse: string
+  public howToUse: string;
 
   @column()
-  public keyingredient: string
+  public keyingredient: string;
 
   @column()
-  public isFeatured: boolean
+  public isFeatured: boolean;
 
   @column.dateTime({ autoCreate: true })
-  public createdAt: DateTime
+  public createdAt: DateTime;
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updatedAt: DateTime
+  public updatedAt: DateTime;
 
   @belongsTo(() => Category)
-  public category: BelongsTo<typeof Category>
+  public category: BelongsTo<typeof Category>;
 
   @hasMany(() => ProductImage)
-  public images: HasMany<typeof ProductImage>
+  public images: HasMany<typeof ProductImage>;
 
   @manyToMany(() => SkinType)
-  public skinTypes: ManyToMany<typeof SkinType>
+  public skinTypes: ManyToMany<typeof SkinType>;
 
   @manyToMany(() => SkinConcern)
-  public skinConcerns: ManyToMany<typeof SkinConcern>
+  public skinConcerns: ManyToMany<typeof SkinConcern>;
 
   @manyToMany(() => Product, {
     pivotTable: 'product_product',
