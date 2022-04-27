@@ -121,3 +121,5 @@ Route.group(() => {
   Route.delete('/:id', 'TagsController.delete')
 })
 .prefix('tag');
+
+Route.post('/feature/:slug', 'FeaturesController.feature')
