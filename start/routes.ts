@@ -25,8 +25,9 @@ Route.get("/", async () => {
 });
 
 Route.group(() => {
-  Route.post("login", "AuthController.login");
-}).prefix('auth');
+  Route.post("/login", "AuthController.login");
+  Route.post('/register', "AuthController.register")
+}).prefix('/auth');
 
 Route.group(() => {
   Route.get("/users", "UsersController.paginate");
@@ -46,7 +47,7 @@ Route.group(() => {
   Route.get("/", "HowToUseBannersController.paginate");
   Route.post("/", "HowToUseBannersController.store").middleware('MultiUploadImage:images');
   Route.delete("/:id", "HowToUseBannersController.delete");
-}).prefix('how-to-use-banners');
+}).prefix('/how-to-use-banners');
 
 Route.group(() => {
   Route.get("/skin-types", "SkinTypesController.paginate");
@@ -72,11 +73,13 @@ Route.group(() => {
 Route.group(() => {
   Route.get('/', 'CategoriesController.show');
   Route.get('/:id/banners', 'HowToUseBannersController.getByCategoryId')
+  Route.post('/', 'CategoriesController.store')
 })
 .prefix('/categories');
 
 Route.group(() => {
   Route.get('/', 'ProductsController.paginate');
+  Route.get('/:categoryId', 'ProductsController.showByCategory')
   Route.get('/:slug', 'ProductsController.findBySlug');
   Route.post('/', 'ProductsController.create').middleware('MultiUploadImage:images');
   Route.put('/:id', 'ProductsController.update');
@@ -96,7 +99,7 @@ Route.group(() => {
     Route.group(() => {
       Route.post('/', 'ProductsController.storeSkinTypes');
       Route.delete('/:id', 'ProductsController.deleteSkinType')
-    }).prefix('skin-types');
+    }).prefix('/skin-types');
 
     Route.group(() => {
       Route.post('/', 'ProductsController.storeSkinConcerns');
@@ -113,13 +116,13 @@ Route.group(() => {
   Route.put('/:id', 'ArticlesController.update').middleware('UploadImage:thumbnail');
   Route.delete('/:id', 'ArticlesController.delete')
 })
-.prefix('articles');
+.prefix('/articles');
 
 Route.group(() => {
   Route.get('/', 'TagsController.show');
   // Route.post('/', 'TagsController.create')
   Route.delete('/:id', 'TagsController.delete')
 })
-.prefix('tag');
+.prefix('/tag');
 
 Route.post('/feature/:slug', 'FeaturesController.feature')

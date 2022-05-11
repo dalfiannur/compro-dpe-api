@@ -9,6 +9,23 @@ import RelatedProductValidator from 'App/Validators/RelatedProductValidator'
 import UpdateProductValidator from 'App/Validators/UpdateProductValidator'
 
 export default class ProductsController {
+  public async showByCategory({response, params}){
+    const product = await Product.query().where('categoryId', params.categoryId)
+    if (!product){
+      return response.notFound({
+        status: 404,
+        message: 'Product not found'
+      })
+    }
+    else {
+      return response.ok({
+        status: 200,
+        message: 'Product retrieved successfully',
+        data: product
+      })
+    }
+  }
+
   public async findBySlug({ response, params }) {
     const product = await Product.query()
       .where('slug', params.slug)
