@@ -44,7 +44,7 @@ const corsConfig: CorsConfig = {
   |                     one of the above values.
   |
   */
-  origin: ['dpelab.co.id', 'd19b-103-105-33-112.ap.ngrok.io'],
+  origin: '*',
 
   /*
   |--------------------------------------------------------------------------
