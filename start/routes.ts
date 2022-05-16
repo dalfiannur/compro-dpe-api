@@ -80,7 +80,7 @@ Route.group(() => {
 Route.group(() => {
   Route.get('/', 'ProductsController.paginate');
   Route.get('/:categoryId', 'ProductsController.showByCategory')
-  Route.get('/:slug', 'ProductsController.findBySlug');
+  Route.get('/slug/:slug', 'ProductsController.findBySlug');
   Route.post('/', 'ProductsController.create').middleware('MultiUploadImage:images');
   Route.put('/:id', 'ProductsController.update');
   Route.delete('/:id', 'ProductsController.delete');
