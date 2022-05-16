@@ -5,7 +5,7 @@ import UploadHelper from 'App/Helpers/UploadHelper'
 export default class MultiUploadImage {
   public async handle({ request }: HttpContextContract, next: () => Promise<void>, paths: string[]) {
     for (let path of paths) {
-      if (request.input(path)) {
+      if (path && request.input(path)) {
         const data: String[] = []
         for (let _image of request.input(path)) {
           const image = UploadHelper.parseBase64(_image)
