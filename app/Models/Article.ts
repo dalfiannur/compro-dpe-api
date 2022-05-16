@@ -52,10 +52,9 @@ export default class Article extends BaseModel {
   public tags: ManyToMany<typeof Tag>;
 
   @beforeDelete()
-  public static beforeDeleteHook(article: Article) {
-    article.tags.forEach(async (tag) => {
-      await tag.delete()
-    })
+  public static async beforeDeleteHook(article: Article) {
+    const tags = await article.related('tags').query().exec()
+    await article.related('tags').detach(tags.map((tag) => tag.id))
   }
 
   @afterDelete()
