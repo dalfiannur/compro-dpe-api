@@ -24,6 +24,9 @@ export default class TagsController {
         }
         
         await tag.delete()
-        return 'deleted'
+        return response.ok({
+            status: 200,
+            message: 'Tag deleted successfully'
+        })
     }
 }
