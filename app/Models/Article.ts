@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { afterDelete, BelongsTo, belongsTo, column, computed, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { afterDelete, beforeDelete, BelongsTo, belongsTo, column, computed, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
 import User from './User'
 import Tag from './Tag'
@@ -50,6 +50,13 @@ export default class Article extends BaseModel {
 
   @manyToMany(() => Tag)
   public tags: ManyToMany<typeof Tag>;
+
+  @beforeDelete()
+  public static beforeDeleteHook(article: Article) {
+    article.tags.forEach(async (tag) => {
+      await tag.delete()
+    })
+  }
 
   @afterDelete()
   public static afterDeleteHook(article: Article) {
