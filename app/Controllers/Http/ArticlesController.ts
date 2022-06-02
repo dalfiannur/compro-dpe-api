@@ -60,6 +60,30 @@ export default class ArticlesController {
     }
   }
 
+  public async paginate({ request, response }: HttpContextContract) {
+    const {
+      page = 1,
+      perPage = 10,
+      orderBy = "created_at",
+      orderSort = "desc",
+    } = request.qs();
+
+    const query = Article.query().preload("user");
+
+    const allowedOrders = ["createdAt", "id", "title"];
+
+    if (allowedOrders.includes(orderBy)) {
+      query.orderBy(orderBy, orderSort);
+    }
+
+    const news = await query.paginate(page, perPage);
+    return response.ok({
+      status: 200,
+      message: "Articles paginated successfully",
+      ...news.toJSON(),
+    });
+  }
+
   public async show({ request, response }: HttpContextContract) {
     const {
       page = 1,
