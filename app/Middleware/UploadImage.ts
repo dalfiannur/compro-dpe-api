@@ -12,6 +12,9 @@ export default class UploadImage {
 
     if (path && request.input(path)) {
       const image = UploadHelper.parseBase64(request.input(path));
+      if (!image) {
+        return response.unprocessableEntity('Invalid image format');
+      }
       const filename = UploadHelper.generateFileName("webp");
       const filePath = UploadHelper.generatePath("images", filename);
       ImageHelper.move(filePath, image.data);
