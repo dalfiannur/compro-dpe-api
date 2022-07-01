@@ -1,62 +1,62 @@
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import ImageHelper from 'App/Helpers/ImageHelper'
-import Article from 'App/Models/Article'
-import Tag from 'App/Models/Tag'
-import ArticleValidator from 'App/Validators/ArticleValidator'
-import UpdateArticleValidator from 'App/Validators/UpdateArticleValidator'
+import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
+import ImageHelper from "App/Helpers/ImageHelper";
+import Article from "App/Models/Article";
+import Tag from "App/Models/Tag";
+import ArticleValidator from "App/Validators/ArticleValidator";
+import UpdateArticleValidator from "App/Validators/UpdateArticleValidator";
 
 export default class ArticlesController {
   public async create({ request, response, auth }: HttpContextContract) {
-    await auth.use('api').authenticate()
-    const payload = await request.validate(ArticleValidator)
+    await auth.use("api").authenticate();
+    const payload = await request.validate(ArticleValidator);
 
     const article = await Article.create({
       title: payload.title,
       userId: auth.user!.id,
       content: payload.content,
       thumbnail: payload.thumbnail,
-      isFeatured: payload.isFeatured
-    })
+      isFeatured: payload.isFeatured,
+    });
 
     for (const i of payload.tags) {
-      const tag = await Tag.firstOrCreate({ name: i })
-      await article.related('tags').attach([tag.id]);
+      const tag = await Tag.firstOrCreate({ name: i });
+      await article.related("tags").attach([tag.id]);
     }
 
     return response.created({
       status: 201,
-      message: 'Article created successfully',
-      data: article.serialize()
-    })
+      message: "Article created successfully",
+      data: article.serialize(),
+    });
   }
 
   public async update({ request, params, response }: HttpContextContract) {
-    const payload = await request.validate(UpdateArticleValidator)
-    const article = await Article.find(params.id)
+    const payload = await request.validate(UpdateArticleValidator);
+    const article = await Article.find(params.id);
     if (!article) {
       return response.notFound({
         status: 404,
-        message: 'Article not found'
-      })
+        message: "Article not found",
+      });
     }
 
     if (payload.thumbnail) {
-      ImageHelper.delete(article.thumbnail)
+      ImageHelper.delete(article.thumbnail);
     }
 
     try {
-      await article.merge(payload).save()
+      await article.merge(payload).save();
       return response.ok({
         status: 200,
-        message: 'Article updated successfully',
-        data: article.serialize()
-      })
+        message: "Article updated successfully",
+        data: article.serialize(),
+      });
     } catch (errors) {
       return response.badRequest({
         status: 400,
-        message: 'Article not updated',
-        errors
-      })
+        message: "Article not updated",
+        errors,
+      });
     }
   }
 
@@ -85,75 +85,69 @@ export default class ArticlesController {
   }
 
   public async show({ request, response }: HttpContextContract) {
-    const {
-      page = 1,
-      perPage = 6,
-      search
-    } = request.qs();
+    const { page = 1, perPage = 6, search } = request.qs();
 
-    const query = Article
-      .query()
-      .preload('user')
-      .preload('tags');
+    const query = Article.query().preload("user").preload("tags");
 
     if (search) {
-      query.where('title', 'like', `%${search}%`)
+      query.where("title", "like", `%${search}%`);
     }
 
     const articles = await query.paginate(page, perPage);
 
     return response.ok({
       status: 200,
-      message: 'Articles retrieved successfully',
-      ...articles.serialize()
-    })
+      message: "Articles retrieved successfully",
+      ...articles.serialize(),
+    });
   }
 
   public async findById({ params, response }: HttpContextContract) {
-    const article = await Article
-      .query()
-      .preload('user')
-      .preload('tags')
-      .where('slug', params.slug)
+    const article = await Article.query()
+      .preload("user")
+      .preload("tags")
+      .where("slug", params.slug)
       .first();
 
     if (!article) {
       return response.notFound({
         status: 404,
-        message: 'Article not found'
-      })
+        message: "Article not found",
+      });
     }
+
+    article.merge({ viewCount: article.viewCount + 1 }).save();
 
     return response.ok({
       status: 200,
-      message: 'Article found',
-      data: article
-    })
+      message: "Article found",
+      data: article,
+    });
   }
   public async delete({ params, response, auth }: HttpContextContract) {
-    await auth.use('api').authenticate()
+    await auth.use("api").authenticate();
 
-    const article = await Article.find(params.id)
+    const article = await Article.find(params.id);
 
     if (!article) {
       return response.notFound({
         status: 404,
-        message: 'Article not found'
-      })
+        message: "Article not found",
+      });
     }
 
     try {
-      await article.delete()
+      await article.delete();
       return response.ok({
         status: 200,
-        message: 'Article deleted successfully'
-      })
+        message: "Article deleted successfully",
+      });
     } catch (errors) {
       return response.badRequest({
         status: 400,
-        message: 'Article not deleted',
-        errors
-      })
+        message: "Article not deleted",
+        errors,
+      });
     }
   }
 }

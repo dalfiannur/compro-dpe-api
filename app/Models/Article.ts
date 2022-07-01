@@ -31,6 +31,9 @@ export default class Article extends BaseModel {
   @column()
   public thumbnail: string;
 
+  @column()
+  public viewCount: number;
+
   @computed()
   public get thumbnailUrl() {
     return AssetHelper.getFullUrl(this.thumbnail)
