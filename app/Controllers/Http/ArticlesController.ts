@@ -66,14 +66,19 @@ export default class ArticlesController {
       perPage = 10,
       orderBy = "created_at",
       orderSort = "desc",
+      search
     } = request.qs();
 
     const query = Article.query().preload("user");
 
-    const allowedOrders = ["createdAt", "id", "title"];
+    const allowedOrders = ["createdAt", "id", "title", "viewCount"];
 
     if (allowedOrders.includes(orderBy)) {
       query.orderBy(orderBy, orderSort);
+    }
+
+    if (search) {
+      query.where("title", "like", `%${search}%`);
     }
 
     const news = await query.paginate(page, perPage);
@@ -81,24 +86,6 @@ export default class ArticlesController {
       status: 200,
       message: "Articles paginated successfully",
       ...news.toJSON(),
-    });
-  }
-
-  public async show({ request, response }: HttpContextContract) {
-    const { page = 1, perPage = 6, search } = request.qs();
-
-    const query = Article.query().preload("user").preload("tags");
-
-    if (search) {
-      query.where("title", "like", `%${search}%`);
-    }
-
-    const articles = await query.paginate(page, perPage);
-
-    return response.ok({
-      status: 200,
-      message: "Articles retrieved successfully",
-      ...articles.serialize(),
     });
   }
 
