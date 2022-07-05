@@ -111,10 +111,11 @@ Route.group(() => {
 
 Route.group(() => {
   Route.get('/', 'ArticlesController.paginate');
-  Route.get('/:slug', 'ArticlesController.findById');
+  Route.get('/:slug', 'ArticlesController.findBySlug');
   Route.post('/', 'ArticlesController.create').middleware('UploadImage:thumbnail');
   Route.put('/:id', 'ArticlesController.update').middleware('UploadImage:thumbnail');
   Route.delete('/:id', 'ArticlesController.delete')
+  Route.post('/:id/products', 'ArticlesController.addProductRelation')
 })
 .prefix('/articles');
 

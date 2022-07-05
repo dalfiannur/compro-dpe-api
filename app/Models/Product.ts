@@ -6,6 +6,7 @@ import ProductImage from './ProductImage'
 import SkinType from './SkinType'
 import SkinConcern from './SkinConcern'
 import BaseModel from './BaseModel'
+import Article from './Article'
 
 export default class Product extends BaseModel {
   @column({ isPrimary: true })
@@ -60,6 +61,9 @@ export default class Product extends BaseModel {
 
   @manyToMany(() => SkinConcern)
   public skinConcerns: ManyToMany<typeof SkinConcern>;
+
+  @manyToMany(() => Article)
+  public articles: ManyToMany<typeof Article>
 
   @manyToMany(() => Product, {
     pivotTable: 'product_product',

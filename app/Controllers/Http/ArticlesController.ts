@@ -4,6 +4,8 @@ import Article from "App/Models/Article";
 import Tag from "App/Models/Tag";
 import ArticleValidator from "App/Validators/ArticleValidator";
 import UpdateArticleValidator from "App/Validators/UpdateArticleValidator";
+import Product from "../../Models/Product";
+import AddProductRelationValidator from "../../Validators/AddProductRelationValidator";
 
 export default class ArticlesController {
   public async create({ request, response, auth }: HttpContextContract) {
@@ -66,7 +68,7 @@ export default class ArticlesController {
       perPage = 10,
       orderBy = "created_at",
       orderSort = "desc",
-      search
+      search,
     } = request.qs();
 
     const query = Article.query().preload("user");
@@ -89,10 +91,17 @@ export default class ArticlesController {
     });
   }
 
-  public async findById({ params, response }: HttpContextContract) {
+  public async findBySlug({ params, response }: HttpContextContract) {
     const article = await Article.query()
       .preload("user")
       .preload("tags")
+      .preload("products", (q) => {
+        q
+          .preload('images')
+          .preload('category')
+          .preload('skinConcerns')
+          .preload('skinTypes')
+      })
       .where("slug", params.slug)
       .first();
 
@@ -111,6 +120,7 @@ export default class ArticlesController {
       data: article,
     });
   }
+
   public async delete({ params, response, auth }: HttpContextContract) {
     await auth.use("api").authenticate();
 
@@ -136,5 +146,32 @@ export default class ArticlesController {
         errors,
       });
     }
+  }
+
+  public async addProductRelation({
+    params,
+    response,
+    request,
+    auth,
+  }: HttpContextContract) {
+    await auth.use("api").authenticate();
+    const payload = await request.validate(AddProductRelationValidator);
+    const article = await Article.find(params.id);
+
+    if (!article) {
+      return response.notFound({
+        status: 404,
+        message: "Article not found",
+      });
+    }
+
+    const products = await Product.query().whereIn('id', payload.productIds).exec();
+
+    await article.related("products").attach(products.map((item) => item.id));
+
+    return response.json({
+      status: 200,
+      message: "Product related to article",
+    });
   }
 }

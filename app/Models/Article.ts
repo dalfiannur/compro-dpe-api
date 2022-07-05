@@ -6,6 +6,7 @@ import Tag from './Tag'
 import ImageHelper from 'App/Helpers/ImageHelper'
 import BaseModel from './BaseModel'
 import { AssetHelper } from 'App/Helpers/AssetHelper'
+import Product from './Product'
 
 export default class Article extends BaseModel {
   @column({ isPrimary: true })
@@ -53,6 +54,9 @@ export default class Article extends BaseModel {
 
   @manyToMany(() => Tag)
   public tags: ManyToMany<typeof Tag>;
+
+  @manyToMany(() => Product)
+  public products: ManyToMany<typeof Product>
 
   @beforeDelete()
   public static async beforeDeleteHook(article: Article) {
