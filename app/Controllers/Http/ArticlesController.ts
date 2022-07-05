@@ -174,4 +174,32 @@ export default class ArticlesController {
       message: "Product related to article",
     });
   }
+
+  public async deleteProductRelation({
+    params,
+    response,
+    request,
+    auth,
+  }: HttpContextContract) {
+    await auth.use("api").authenticate();
+    const article = await Article.find(params.id);
+
+    if (!article) {
+      return response.notFound({
+        status: 404,
+        message: "Article not found",
+      });
+    }
+
+    const product = await Product.query().where('id', params.productId).first();
+
+    if (product) {
+      await article.related("products").detach([product.id])
+    }
+
+    return response.json({
+      status: 200,
+      message: "Product related to article",
+    });
+  }
 }

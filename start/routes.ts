@@ -116,6 +116,7 @@ Route.group(() => {
   Route.put('/:id', 'ArticlesController.update').middleware('UploadImage:thumbnail');
   Route.delete('/:id', 'ArticlesController.delete')
   Route.post('/:id/products', 'ArticlesController.addProductRelation')
+  Route.delete('/:id/products/:productId', 'ArticlesController.deleteProductRelation')
 })
 .prefix('/articles');
 
