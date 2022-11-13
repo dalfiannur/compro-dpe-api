@@ -47,7 +47,13 @@ export default class ArticlesController {
     }
 
     try {
-      await article.merge(payload).save();
+      const { authorId, ...restPayload } = payload;
+      await article
+        .merge({
+          ...restPayload,
+          userId: authorId,
+        })
+        .save();
       return response.ok({
         status: 200,
         message: "Article updated successfully",
