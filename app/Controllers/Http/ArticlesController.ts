@@ -96,11 +96,10 @@ export default class ArticlesController {
       .preload("user")
       .preload("tags")
       .preload("products", (q) => {
-        q
-          .preload('images')
-          .preload('category')
-          .preload('skinConcerns')
-          .preload('skinTypes')
+        q.preload("images")
+          .preload("category")
+          .preload("skinConcerns")
+          .preload("skinTypes");
       })
       .where("slug", params.slug)
       .first();
@@ -165,7 +164,9 @@ export default class ArticlesController {
       });
     }
 
-    const products = await Product.query().whereIn('id', payload.productIds).exec();
+    const products = await Product.query()
+      .whereIn("id", payload.productIds)
+      .exec();
 
     await article.related("products").attach(products.map((item) => item.id));
 
@@ -178,7 +179,6 @@ export default class ArticlesController {
   public async deleteProductRelation({
     params,
     response,
-    request,
     auth,
   }: HttpContextContract) {
     await auth.use("api").authenticate();
@@ -191,10 +191,10 @@ export default class ArticlesController {
       });
     }
 
-    const product = await Product.query().where('id', params.productId).first();
+    const product = await Product.query().where("id", params.productId).first();
 
     if (product) {
-      await article.related("products").detach([product.id])
+      await article.related("products").detach([product.id]);
     }
 
     return response.json({
