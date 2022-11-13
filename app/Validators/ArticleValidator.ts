@@ -25,6 +25,7 @@ export default class ArticleValidator {
    */
   public schema = schema.create({
     title: schema.string({ trim: true }),
+    authorId: schema.number(),
     content: schema.string(),
     tags: schema.array().members(schema.string()),
     thumbnail: schema.string(),
