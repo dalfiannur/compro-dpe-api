@@ -25,6 +25,7 @@ export default class UpdateArticleValidator {
    */
   public schema = schema.create({
     title: schema.string.optional({ trim: true }),
+    authorId: schema.number.optional(),
     content: schema.string.optional(),
     thumbnail: schema.string.optional(),
     isFeatured: schema.boolean.optional()
