@@ -14,7 +14,7 @@ export default class ArticlesController {
 
     const article = await Article.create({
       title: payload.title,
-      userId: auth.user!.id,
+      userId: payload.authorId,
       content: payload.content,
       thumbnail: payload.thumbnail,
       isFeatured: payload.isFeatured,
